@@ -1,14 +1,21 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
 
 interface ConferenceFormProps {
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: string | null;
+  selectedFile: File | null;
 }
 
 export default function ConferenceForm({
   handleFileChange,
   previewUrl,
+  selectedFile,
 }: ConferenceFormProps) {
+  const [removeFile, setRemoveFile] = useState(selectedFile);
+  const handleRemove = () => {};
+
   const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -77,10 +84,12 @@ export default function ConferenceForm({
 
               {previewUrl ? (
                 <div className="flex justify-center items-center pt-3 gap-3">
-                  <button className="btn btn-xs bg-gray-700/70">
+                  <button className="btn btn-xs bg-transparent border-0 shadow-none hover:underline hover:bg-gray-700/70">
                     Remove image
                   </button>
-                  <button className="btn btn-xs">Change image</button>
+                  <button className="btn btn-xs bg-transparent border-0 shadow-none hover:underline hover:bg-gray-700/70">
+                    Change image
+                  </button>
                 </div>
               ) : (
                 <p className="text-base text-gray-400 pt-3 tracking-widest">
