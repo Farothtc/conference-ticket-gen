@@ -75,6 +75,7 @@ export default function Home() {
         <ConferenceForm
           handleFileChange={handleFileChange}
           previewUrl={previewUrl}
+          selectedFile={selectedFile}
         />
       </section>
     </main>
