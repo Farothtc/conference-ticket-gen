@@ -1,20 +1,41 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface ConferenceFormProps {
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: string | null;
   selectedFile: File | null;
+  onRemoveFile: () => void;
+  onChangeFile: () => void;
+  participantCred: {
+    fullName: string;
+    email: string;
+    git: string;
+  };
+  handleChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function ConferenceForm({
   handleFileChange,
   previewUrl,
   selectedFile,
+  onRemoveFile,
+  onChangeFile,
+  participantCred,
+  handleChangeInput,
 }: ConferenceFormProps) {
-  const [removeFile, setRemoveFile] = useState(selectedFile);
-  const handleRemove = () => {};
+  const [nameError, setNameError] = useState("");
+  const [mailError, setMailError] = useState("");
+  const [gitError, setGitError] = useState("");
+
+  const handleRemove = () => {
+    onRemoveFile();
+  };
+
+  const handleChangeImage = () => {
+    onChangeFile();
+  };
 
   const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
@@ -48,6 +69,67 @@ export default function ConferenceForm({
       handleFileChange(syntheticEvent);
     }
   };
+
+  // Name Handlers
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (/^[a-zA-Z\s]*$/.test(value)) {
+      setNameError("");
+      handleChangeInput(event);
+    } else {
+      setNameError("Wrong name format");
+    }
+  };
+
+  const handleNameBlur = () => {
+    if (participantCred.fullName.trim() === "") {
+      setNameError("Cannot be blank");
+    } else {
+      setNameError("");
+    }
+  };
+
+  // Email Handlers
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value) {
+      setMailError("");
+      handleChangeInput(event);
+    } else {
+      setMailError("Please enter a valid email address.");
+    }
+  };
+
+  const handleEmailBlur = () => {
+    if (participantCred.email.trim() === "") {
+      setMailError("Can not be blank");
+    } else {
+      setMailError("");
+    }
+  };
+
+  // Git Handlers
+
+  const handleGitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value) {
+      setGitError("");
+      handleChangeInput(event);
+    } else {
+      setGitError("Error");
+    }
+  };
+
+  const handleGitBlur = () => {
+    if (participantCred.git.trim() === "") {
+      setGitError("Can not be blank");
+    } else {
+      setGitError("");
+    }
+  };
+
   return (
     <section className="pt-10 w-[25%]">
       <div className="flex flex-col gap-4">
@@ -84,10 +166,16 @@ export default function ConferenceForm({
 
               {previewUrl ? (
                 <div className="flex justify-center items-center pt-3 gap-3">
-                  <button className="btn btn-xs bg-transparent border-0 shadow-none hover:underline hover:bg-gray-700/70">
+                  <button
+                    className="btn btn-xs bg-transparent border-0 shadow-none hover:underline hover:bg-gray-700/70"
+                    onClick={handleRemove}
+                  >
                     Remove image
                   </button>
-                  <button className="btn btn-xs bg-transparent border-0 shadow-none hover:underline hover:bg-gray-700/70">
+                  <button
+                    className="btn btn-xs bg-transparent border-0 shadow-none hover:underline hover:bg-gray-700/70"
+                    onClick={handleChangeImage}
+                  >
                     Change image
                   </button>
                 </div>
@@ -123,8 +211,25 @@ export default function ConferenceForm({
           </legend>
           <input
             type="text"
-            className="input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70"
+            className={`input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70 ${
+              nameError ? "border-red-500" : ""
+            }`}
+            name="fullName"
+            value={participantCred.fullName}
+            onChange={handleNameChange}
+            onBlur={handleNameBlur}
           />
+          {nameError && (
+            <div className="flex justify-start items-center gap-2 pt-1">
+              <Image
+                src={"/icon-danger-info.svg"}
+                alt="Info"
+                height={16}
+                width={16}
+              ></Image>
+              <p className="text-xs text-red-500 ">{nameError}</p>
+            </div>
+          )}
         </fieldset>
         {/* Email */}
         <fieldset className="fieldset w-full">
@@ -133,9 +238,26 @@ export default function ConferenceForm({
           </legend>
           <input
             type="email"
-            className="input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70"
+            className={`input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70 ${
+              mailError ? "border-red-500" : ""
+            }`}
+            name="email"
+            value={participantCred.email}
+            onChange={handleEmailChange}
+            onBlur={handleEmailBlur}
             placeholder="example@email.com"
           />
+          {mailError && (
+            <div className="flex justify-start items-center gap-2 pt-1">
+              <Image
+                src={"/icon-danger-info.svg"}
+                alt="Info"
+                height={16}
+                width={16}
+              ></Image>
+              <p className="text-xs text-red-500 ">{mailError}</p>
+            </div>
+          )}
         </fieldset>
         {/* Github */}
         <fieldset className="fieldset w-full">
@@ -144,9 +266,26 @@ export default function ConferenceForm({
           </legend>
           <input
             type="text"
-            className="input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70"
+            className={`input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70 ${
+              gitError ? "border-red-500" : ""
+            }`}
+            name="git"
+            value={participantCred.git}
+            onChange={handleGitChange}
+            onBlur={handleGitBlur}
             placeholder="@yourusername"
           />
+          {gitError && (
+            <div className="flex justify-start items-center gap-2 pt-1">
+              <Image
+                src={"/icon-danger-info.svg"}
+                alt="Info"
+                height={16}
+                width={16}
+              ></Image>
+              <p className="text-xs text-red-500 ">{gitError}</p>
+            </div>
+          )}
         </fieldset>
         {/* Submit Button */}
         <button className="btn text-black w-full bg-red-400 rounded-lg ">
