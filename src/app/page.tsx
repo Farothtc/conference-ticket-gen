@@ -7,10 +7,34 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
+  const [participantCred, setParticipantCred] = useState({
+    fullName: "",
+    email: "",
+    git: "",
+  });
+
+  console.log(participantCred, "global");
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
   };
+
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+  };
+
+  const handleChangeFile = () => {
+    setPreviewUrl(null);
+  };
+
+  function handleChangeInput(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    setParticipantCred((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
 
   useEffect(() => {
     if (selectedFile) {
@@ -76,6 +100,10 @@ export default function Home() {
           handleFileChange={handleFileChange}
           previewUrl={previewUrl}
           selectedFile={selectedFile}
+          onRemoveFile={handleRemoveFile}
+          onChangeFile={handleChangeFile}
+          participantCred={participantCred}
+          handleChangeInput={handleChangeInput}
         />
       </section>
     </main>
