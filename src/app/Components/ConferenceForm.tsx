@@ -8,12 +8,14 @@ interface ConferenceFormProps {
   selectedFile: File | null;
   onRemoveFile: () => void;
   onChangeFile: () => void;
+  handleTicketSubmit: () => void;
   participantCred: {
     fullName: string;
     email: string;
     git: string;
   };
   handleChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  fileError: string;
 }
 
 export default function ConferenceForm({
@@ -24,6 +26,8 @@ export default function ConferenceForm({
   onChangeFile,
   participantCred,
   handleChangeInput,
+  handleTicketSubmit,
+  fileError,
 }: ConferenceFormProps) {
   const [nameError, setNameError] = useState("");
   const [mailError, setMailError] = useState("");
@@ -192,17 +196,29 @@ export default function ConferenceForm({
               onChange={handleFileChange}
             />
           </label>
-          <div className="flex justify-start items-center gap-2 pt-3">
-            <Image
-              src={"/icon-info.svg"}
-              alt="Info"
-              height={16}
-              width={16}
-            ></Image>
-            <p className="text-xs text-gray-400 ">
-              Upload your photo (JPG or PNG, max size: 500KB).
-            </p>
-          </div>
+          {fileError ? (
+            <div className="flex justify-start items-center gap-2 pt-3">
+              <Image
+                src={"/icon-danger-info.svg"}
+                alt="Info"
+                height={16}
+                width={16}
+              ></Image>
+              <p className="text-xs text-red-500 ">{fileError}</p>
+            </div>
+          ) : (
+            <div className="flex justify-start items-center gap-2 pt-3">
+              <Image
+                src={"/icon-info.svg"}
+                alt="Info"
+                height={16}
+                width={16}
+              ></Image>
+              <p className="text-xs text-gray-400 ">
+                Upload your photo (JPG or PNG, max size: 500KB).
+              </p>
+            </div>
+          )}
         </div>
         {/* Name */}
         <fieldset className="fieldset w-full">
@@ -288,7 +304,10 @@ export default function ConferenceForm({
           )}
         </fieldset>
         {/* Submit Button */}
-        <button className="btn text-black w-full bg-red-400 rounded-lg ">
+        <button
+          className="btn text-black w-full bg-red-400 rounded-lg "
+          onClick={handleTicketSubmit}
+        >
           Generate My Ticket
         </button>
       </div>
