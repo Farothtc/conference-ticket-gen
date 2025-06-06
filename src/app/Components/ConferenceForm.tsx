@@ -135,10 +135,12 @@ export default function ConferenceForm({
   };
 
   return (
-    <section className="pt-10 w-[25%]">
+    <section className="pt-10 w-[90%] md:w-[50%] lg:w-[25%]">
       <div className="flex flex-col gap-4">
         <div>
-          <h1 className="pb-3 text-base tracking-wide">Upload Avatar</h1>
+          <h1 className="pb-3 text-base tracking-wide text-white">
+            Upload Avatar
+          </h1>
           <label
             htmlFor="avatar-upload"
             className="file-upload flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-500/60 bg-gray-700/40 rounded-2xl cursor-pointer hover:bg-gray-700/70"
@@ -169,7 +171,7 @@ export default function ConferenceForm({
               )}
 
               {previewUrl ? (
-                <div className="flex justify-center items-center pt-3 gap-3">
+                <div className="flex justify-center items-center pt-3 gap-3 text-white">
                   <button
                     className="btn btn-xs bg-transparent border-0 shadow-none hover:underline hover:bg-gray-700/70"
                     onClick={handleRemove}
@@ -222,12 +224,12 @@ export default function ConferenceForm({
         </div>
         {/* Name */}
         <fieldset className="fieldset w-full">
-          <legend className="fieldset-legend text-base tracking-wide font-medium">
+          <legend className="fieldset-legend text-base tracking-wide font-medium text-white">
             Full Name
           </legend>
           <input
             type="text"
-            className={`input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70 ${
+            className={`input w-full bg-gray-700/40 rounded-lg hover:bg-gray-700/70 text-white ${
               nameError ? "border-red-500" : ""
             }`}
             name="fullName"
@@ -249,7 +251,7 @@ export default function ConferenceForm({
         </fieldset>
         {/* Email */}
         <fieldset className="fieldset w-full">
-          <legend className="fieldset-legend text-base tracking-wide font-medium">
+          <legend className="fieldset-legend text-base tracking-wide font-medium text-white">
             Email Address
           </legend>
           <input
@@ -277,7 +279,7 @@ export default function ConferenceForm({
         </fieldset>
         {/* Github */}
         <fieldset className="fieldset w-full">
-          <legend className="fieldset-legend text-base tracking-wide font-medium">
+          <legend className="fieldset-legend text-base tracking-wide font-medium text-white">
             GitHub Username
           </legend>
           <input
@@ -305,7 +307,7 @@ export default function ConferenceForm({
         </fieldset>
         {/* Submit Button */}
         <button
-          className="btn text-black w-full bg-red-400 rounded-lg "
+          className="btn text-black w-full bg-red-400 rounded-lg border-red-400 mb-2"
           onClick={handleTicketSubmit}
         >
           Generate My Ticket
