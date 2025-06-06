@@ -18,4 +18,4 @@ This is a project that aims to reflect a Ticket Generator.
 - Array destructuring,
 - Regexes.
 
-Check it out on [here](https://browser-extension-manager-five.vercel.app) !
+Check it out on [here](https://conference-ticket-gen-brown.vercel.app) !
