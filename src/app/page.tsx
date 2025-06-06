@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import ConferenceForm from "./Components/ConferenceForm";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -14,6 +14,18 @@ export default function Home() {
     email: "",
     git: "",
   });
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   console.log(participantCred, "global");
 
@@ -60,6 +72,9 @@ export default function Home() {
     ) {
       setSubmitMyTick(true);
     }
+    if (!selectedFile) {
+      setFileError("You have to upload a photo");
+    }
   };
 
   useEffect(() => {
@@ -73,7 +88,7 @@ export default function Home() {
     }
   }, [selectedFile]);
   return (
-    <main className="relative min-h-screen bg-[url('/background-desktop.png')] bg-cover bg-no-repeat">
+    <main className="relative min-h-screen bg-[url('/background-mobile.png')] sm:bg-[url('/background-desktop.png')] sm:bg-cover sm:bg-no-repeat">
       {/* Top Lines */}
       <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-center w-auto h-auto">
         <Image
@@ -95,7 +110,7 @@ export default function Home() {
         ></Image>
       </div>
       {/* Top right Line */}
-      <div className="absolute right-0 top-0">
+      <div className="absolute right-0 top-0 w-[200px] h-[100px] md:w-auto md:h-auto">
         <Image
           src={"/pattern-squiggly-line-top.svg"}
           alt="Line"
@@ -114,21 +129,70 @@ export default function Home() {
               height={30}
             ></Image>
           </div>
-          <div className="flex flex-col justify-center items-center pt-20 text-5xl gap-4 font-bold tracking-widest">
-            <h1>
+          <div className="flex flex-col justify-center items-center pt-20 text-2xl p-5 md:text-5xl gap-2 md:gap-4 font-bold tracking-widest">
+            <h1 className="text-center">
               Congrats,{" "}
               <span className="bg-gradient-to-r from-red-400 to-white bg-clip-text text-transparent">
                 {participantCred.fullName + "!"}
               </span>
+              {isMobile ? " Your ticket is ready." : ""}
             </h1>
-            <h2>Your ticket is ready.</h2>
+            {isMobile ? "" : <h2>Your ticket is ready.</h2>}
           </div>
-          <div className="pt-5 text-xl text-gray-400 tracking-widest flex justify-center text-wrap items-center w-[35%]">
-            <h1>
+          <div className="pt-5 p-5 text-xl text-gray-400 tracking-widest flex justify-center text-wrap items-center w-full md:w-[35%]">
+            <h1 className="text-center">
               We&apos;ve emailed your ticket to{" "}
               <span className="text-red-400">{participantCred.email}</span> and
               will send updates in the run up to the event.
             </h1>
+          </div>
+          <div className="relative pt-24">
+            <div className="absolute p-8">
+              <Image
+                src={"/logo-full.svg"}
+                alt="logo"
+                width={209}
+                height={30}
+              ></Image>
+              <h1 className="sm:py-6 px-12 tracking-widest text-gray-400 text-sm sm:text-base">
+                Jan 31, 2025 / Austin, TX
+              </h1>
+            </div>
+            <div className="absolute flex gap-4 bottom-0 p-8 sm:p-5 w-full">
+              {previewUrl && (
+                <Image
+                  src={previewUrl}
+                  alt="Avatar"
+                  width={isMobile ? 50 : 90}
+                  height={isMobile ? 50 : 90}
+                  className="rounded-xl"
+                ></Image>
+              )}
+              <div className="flex flex-col justify-center items-start gap-3">
+                <h1 className="text-base sm:text-2xl tracking-wider">
+                  {participantCred.fullName}
+                </h1>
+                <div className="flex justify-center items-center gap-2">
+                  <Image
+                    src={"/icon-github.svg"}
+                    alt="Icon"
+                    width={23}
+                    height={23}
+                  ></Image>
+                  <h1 className="text-gray-400">{participantCred.git}</h1>
+                </div>
+              </div>
+            </div>
+            <h1 className="text-gray-500 text-xl sm:text-2xl absolute right-0 top-[65%] sm:top-[60%] pe-5 rotate-90">
+              #01609
+            </h1>
+            <Image
+              src={"/pattern-ticket.svg"}
+              alt="ticket"
+              width={600}
+              height={280}
+              className="block p-4 md:p-0"
+            ></Image>
           </div>
         </section>
       ) : (
@@ -141,12 +205,12 @@ export default function Home() {
               height={30}
             ></Image>
           </div>
-          <div className="flex flex-col justify-center items-center pt-10 text-5xl gap-4 font-bold tracking-wider">
+          <div className="flex flex-col justify-center items-center pt-10 text-xl md:text-5xl gap-4 font-bold tracking-wider text-white">
             <h1>Your Journey to Coding Conf</h1>
             <h2>2025 Starts Here!</h2>
           </div>
-          <div className="pt-5 text-xl text-gray-400 tracking-widest">
-            <h1>
+          <div className="pt-5 text-sm flex md:text-xl text-gray-400 tracking-widest">
+            <h1 className="text-center">
               Secure your spot at the next year&apos;s biggest coding
               conference.
             </h1>
