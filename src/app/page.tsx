@@ -218,7 +218,6 @@ export default function Home() {
           <ConferenceForm
             handleFileChange={handleFileChange}
             previewUrl={previewUrl}
-            selectedFile={selectedFile}
             onRemoveFile={handleRemoveFile}
             onChangeFile={handleChangeFile}
             participantCred={participantCred}

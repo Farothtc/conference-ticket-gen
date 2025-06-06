@@ -5,7 +5,6 @@ import React, { useState } from "react";
 interface ConferenceFormProps {
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: string | null;
-  selectedFile: File | null;
   onRemoveFile: () => void;
   onChangeFile: () => void;
   handleTicketSubmit: () => void;
@@ -21,7 +20,6 @@ interface ConferenceFormProps {
 export default function ConferenceForm({
   handleFileChange,
   previewUrl,
-  selectedFile,
   onRemoveFile,
   onChangeFile,
   participantCred,
